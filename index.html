@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Hauturu / Little Barrier Island</title>
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+        integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+        crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+        crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet-providers@1.3.0/leaflet-providers.js"></script>
+    <script src="https://unpkg.com/papaparse@5.3.0/papaparse.min.js"></script>
+
+    <style>
+        html,
+        body,
+        #map {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        #title {
+            position: absolute;
+            top: 30px;
+            left: 0;
+            right: 0;
+            margin: auto;
+            z-index: 1000;
+            width: 50%;
+            text-align: center;
+            color: white;
+            border-radius: 5px;
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.8);
+            font-family: Arial, Helvetica, sans-serif;
+            text-shadow: 2px 2px #000000;
+            font-weight: normal;
+            font-size: 1rem;
+        }
+
+        .legend {
+            background-color: lightgray;
+            padding: 15px;
+        }
+
+        .legend i {
+            width: 18px;
+            height: 18px;
+            float: left;
+            margin-right: 8px;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 id="title">Hauturu / Little Barrier Island</h1>
+    <div id="map"></div>
+    <script>
+
+        var map = L.map('map', {
+            minZoom: 6,
+            maxZoom: 23,
+            center: {lat: -36.20030436854431, lng: 175.08567810058594},
+            zoom: 13
+        });
+        var bounds = map.getBounds();
+        bounds._northEast.lat += 10;
+        bounds._northEast.lng += 10;
+        bounds._southWest.lat -= 10;
+        bounds._southWest.lng -= 10;
+        map.setMaxBounds(bounds);
+
+        var baseMaps = {
+            "Hydrographic chart": L.tileLayer('http://tiles-{s}.data-cdn.linz.govt.nz/services;key=4046f32bb87d4a99b33188ab50cb21aa/tiles/v4/set=4758/EPSG:3857/{z}/{x}/{y}.png', {
+                maxZoom: 23,
+                maxNativeZoom: 17,
+                subdomains: 'abcd',
+                attribution: 'Hydrographic chart &copy; <a href="https://data.linz.govt.nz/set/4759-south-island-charts/">LINZ</a>'
+            }).addTo(map),
+            "2013 aerial imagery": L.tileLayer("http://tiles-{s}.data-cdn.linz.govt.nz/services;key=e9447348492944328e52c333dbed4c0e/tiles/v4/layer=51769/EPSG:3857/{z}/{x}/{y}.png", {
+                maxZoom: 23,
+                maxNativeZoom: 22,
+                subdomains: 'abcd',
+                attribution: 'Aerial imagery &copy; <a href="//www.linz.govt.nz/data/linz-data/linz-basemaps/data-attribution">LINZ</a>'
+            }),
+            "ESRI WorldImagery": L.tileLayer.provider("Esri.WorldImagery"),
+            "Google Hybrid": L.tileLayer('http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}', {
+                maxZoom: 20,
+                subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+            })
+        }
+
+        L.control.layers(baseMaps).addTo(map);
+
+        function embed(url) {
+            if (url.includes(".mp4")) {
+                return `<video width="800" height="600" controls>
+							<source src="${url}" type="video/mp4">
+						</video>`;
+            } else {
+                return `<img width=800 height=600 src="${url}">`
+            }
+        }
+
+        Papa.parse("dropbox_links.txt", {
+            download: true,
+            header: false,
+            skipEmptyLines: true,
+            complete: function (links) {
+                console.log(links.data);
+                Papa.parse("https://dl.dropbox.com/s/s1ia731i24k8se8/Hauturu2019.csv?dl=0", {
+                    download: true,
+                    header: true,
+                    dynamicTyping: true,
+                    skipEmptyLines: true,
+                    complete: function (results) {
+                        console.log(results.data)
+                        for (var row of results.data) {
+                            if (!row.visible) continue;
+                            var filename = row.filename
+                            var url;
+                            for (link of links.data) {
+                                if (link[0].includes(filename)) {
+                                    url = link[0]
+                                }
+                            }
+                            var color = "blue";
+                            if (filename.endsWith(".mp4")) {
+                                color = "red";
+                            }
+                            var depth = row.depth.toFixed(2)
+                            L.circleMarker([row.lat, row.lng], { color: color }).addTo(map)
+                                .bindTooltip(`${filename}: ${depth}m`)
+                                .bindPopup(`<b>${filename}</b><br>
+									Date: ${row.date_loc}<br>
+									Time: ${row.time_loc}<br>
+									Depth: ${depth}m<br>
+									Temperature: ${row.temp}°C<br>
+									${embed(url)}
+								`, { maxWidth: 800 })
+                        }
+                    }
+                });
+            }
+        })
+
+    </script>
+</body>
+
+</html>
