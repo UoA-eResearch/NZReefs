@@ -1,0 +1,113 @@
+MAP
+    PROJECTION
+        "init=epsg:3857" # Output projection
+    END
+
+    LAYER
+        NAME "Hauturu_2018_10_23_R2C1"
+        DATA "/mnt/Hauturu/2018-10-23/Hauturu_2018_10_23_R2C1.tif"
+        TYPE RASTER
+        PROJECTION
+            "init=epsg:4326"
+        END
+        STATUS ON
+    END
+
+    LAYER
+        NAME "Hauturu_2018_10_23_R1C3"
+        DATA "/mnt/Hauturu/2018-10-23/Hauturu_2018_10_23_R1C3.tif"
+        TYPE RASTER
+        PROJECTION
+            "init=epsg:4326"
+        END
+        STATUS ON
+    END
+
+    LAYER
+        NAME "Hauturu_2018_10_23_R2C3"
+        DATA "/mnt/Hauturu/2018-10-23/Hauturu_2018_10_23_R2C3.tif"
+        TYPE RASTER
+        PROJECTION
+            "init=epsg:4326"
+        END
+        STATUS ON
+    END
+
+    LAYER
+        NAME "Hauturu_2018_10_23_R2C2"
+        DATA "/mnt/Hauturu/2018-10-23/Hauturu_2018_10_23_R2C2.tif"
+        TYPE RASTER
+        PROJECTION
+            "init=epsg:4326"
+        END
+        STATUS ON
+    END
+
+    LAYER
+        NAME "Hauturu_2018_10_23_R1C1"
+        DATA "/mnt/Hauturu/2018-10-23/Hauturu_2018_10_23_R1C1.tif"
+        TYPE RASTER
+        PROJECTION
+            "init=epsg:4326"
+        END
+        STATUS ON
+    END
+
+    LAYER
+        NAME "Hauturu_2018_10_23_R1C2"
+        DATA "/mnt/Hauturu/2018-10-23/Hauturu_2018_10_23_R1C2.tif"
+        TYPE RASTER
+        PROJECTION
+            "init=epsg:4326"
+        END
+        STATUS ON
+    END
+
+    LAYER
+        NAME "Hauturu2019_06_17_R1C2"
+        DATA "/mnt/Hauturu/2019-06-17/Hauturu2019_06_17_R1C2.tif"
+        TYPE RASTER
+        PROJECTION
+            "init=epsg:4326"
+        END
+        STATUS ON
+    END
+
+    LAYER
+        NAME "Hauturu2019_06_17_R1C1"
+        DATA "/mnt/Hauturu/2019-06-17/Hauturu2019_06_17_R1C1.tif"
+        TYPE RASTER
+        PROJECTION
+            "init=epsg:4326"
+        END
+        STATUS ON
+    END
+
+    LAYER
+        NAME "Hauturu2019_06_17_R2C2"
+        DATA "/mnt/Hauturu/2019-06-17/Hauturu2019_06_17_R2C2.tif"
+        TYPE RASTER
+        PROJECTION
+            "init=epsg:4326"
+        END
+        STATUS ON
+    END
+
+    LAYER
+        NAME "Hauturu2019_06_17_R2C1"
+        DATA "/mnt/Hauturu/2019-06-17/Hauturu2019_06_17_R2C1.tif"
+        TYPE RASTER
+        PROJECTION
+            "init=epsg:4326"
+        END
+        STATUS ON
+    END
+
+    WEB
+        METADATA
+            "wms_title" "Hauturu imagery"
+            "wms_enable_request"  "*"
+        END
+    END
+END
+
