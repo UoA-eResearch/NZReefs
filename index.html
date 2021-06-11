@@ -79,33 +79,43 @@
         bounds._southWest.lng -= 10;
         map.setMaxBounds(bounds);
 
+        map.createPane('colorshift');
+        map.getPane('colorshift').style.zIndex = 200; // same as tilePane
+        map.getPane('colorshift').style.filter = 'contrast(138%) brightness(163%) saturate(168%)';
+
         var baseMaps = {
             "Hydrographic chart": L.tileLayer('http://tiles-{s}.data-cdn.linz.govt.nz/services;key=4046f32bb87d4a99b33188ab50cb21aa/tiles/v4/set=4758/EPSG:3857/{z}/{x}/{y}.png', {
                 maxZoom: 23,
                 maxNativeZoom: 17,
                 subdomains: 'abcd',
                 attribution: 'Hydrographic chart &copy; <a href="https://data.linz.govt.nz/set/4759-south-island-charts/">LINZ</a>'
-            }).addTo(map),
+            }),
             "2013 aerial imagery": L.tileLayer("http://tiles-{s}.data-cdn.linz.govt.nz/services;key=e9447348492944328e52c333dbed4c0e/tiles/v4/layer=51769/EPSG:3857/{z}/{x}/{y}.png", {
+                pane: "colorshift",
                 maxZoom: 23,
                 maxNativeZoom: 22,
                 subdomains: 'abcd',
                 attribution: 'Aerial imagery &copy; <a href="//www.linz.govt.nz/data/linz-data/linz-basemaps/data-attribution">LINZ</a>'
             }),
             "2018 satellite imagery": L.tileLayer.wms('https://api-proxy.auckland-cer.cloud.edu.au/cgi-bin/mapserv?MAP=/home/ubuntu/Hauturu/mapserver.map', {
+                pane: "colorshift",
                 layers: "Hauturu_2018_10_23_R1C1,Hauturu_2018_10_23_R1C3,Hauturu_2018_10_23_R2C2,Hauturu_2018_10_23_R1C2,Hauturu_2018_10_23_R2C1,Hauturu_2018_10_23_R2C3",
                 format: 'image/png',
                 transparent: true,
                 maxZoom: 23,
-            }),
+            }).addTo(map),
             "2019 satellite imagery": L.tileLayer.wms('https://api-proxy.auckland-cer.cloud.edu.au/cgi-bin/mapserv?MAP=/home/ubuntu/Hauturu/mapserver.map', {
+                pane: "colorshift",
                 layers: "Hauturu2019_06_17_R1C1,Hauturu2019_06_17_R1C2,Hauturu2019_06_17_R2C1,Hauturu2019_06_17_R2C2",
                 format: 'image/png',
                 transparent: true,
                 maxZoom: 23,
             }),
-            "ESRI WorldImagery": L.tileLayer.provider("Esri.WorldImagery"),
+            "ESRI WorldImagery": L.tileLayer.provider("Esri.WorldImagery", {
+                pane: "colorshift",
+            }),
             "Google Hybrid": L.tileLayer('http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}', {
+                pane: "colorshift",
                 maxZoom: 20,
                 subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
             })
