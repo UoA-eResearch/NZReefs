@@ -100,14 +100,14 @@
                 attribution: 'Aerial imagery &copy; <a href="//www.linz.govt.nz/data/linz-data/linz-basemaps/data-attribution">LINZ</a>'
             }),
             "2018 satellite imagery": L.tileLayer.wms('https://api-proxy.auckland-cer.cloud.edu.au/cgi-bin/mapserv?MAP=/home/ubuntu/Hauturu/mapserver.map', {
-                pane: "colorshift",
+                //pane: "colorshift",
                 layers: "Hauturu_2018_10_23_R1C1,Hauturu_2018_10_23_R1C3,Hauturu_2018_10_23_R2C2,Hauturu_2018_10_23_R1C2,Hauturu_2018_10_23_R2C1,Hauturu_2018_10_23_R2C3",
                 format: 'image/png',
                 transparent: true,
                 maxZoom: 23,
             }).addTo(map),
             "2019 satellite imagery": L.tileLayer.wms('https://api-proxy.auckland-cer.cloud.edu.au/cgi-bin/mapserv?MAP=/home/ubuntu/Hauturu/mapserver.map', {
-                pane: "colorshift",
+                //pane: "colorshift",
                 layers: "Hauturu2019_06_17_R1C1,Hauturu2019_06_17_R1C2,Hauturu2019_06_17_R2C1,Hauturu2019_06_17_R2C2",
                 format: 'image/png',
                 transparent: true,
