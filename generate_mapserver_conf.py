@@ -2,7 +2,7 @@
 
 from glob import glob
 from os.path import basename, splitext
-files = glob("/mnt/Hauturu/*/*.tif")
+files = glob("/mnt/Hauturu_colorshifted/*/*.tif")
 
 print("""MAP
     PROJECTION
