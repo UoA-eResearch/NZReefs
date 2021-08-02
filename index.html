@@ -199,13 +199,14 @@
             skipEmptyLines: true,
             complete: function (links) {
                 console.log(links.data);
-                Papa.parse("https://dl.dropbox.com/s/s1ia731i24k8se8/Hauturu2019.csv?dl=0", {
+                Papa.parse("https://dl.dropbox.com/s/4wc592c8zjmnfqb/Hauturu2019.csv?dl=0", {
                     download: true,
                     header: true,
                     dynamicTyping: true,
                     skipEmptyLines: true,
                     complete: function (results) {
                         console.log(results.data)
+                        window.data = results.data
                         for (var row of results.data) {
                             if (!row.visible) continue;
                             var filename = row.filename
