@@ -71,7 +71,7 @@
         var map = L.map('map', {
             minZoom: 6,
             maxZoom: 23,
-            center: {lat: -36.20030436854431, lng: 175.08567810058594},
+            center: { lat: -36.20030436854431, lng: 175.08567810058594 },
             zoom: 13
         });
         var bounds = map.getBounds();
@@ -176,16 +176,18 @@
             console.log("edited", e)
         });
 
+        var siteMarkers = L.layerGroup().addTo(map)
         var overlays = {
-            "Drawn items": editableLayers
+            "Drawn items": editableLayers,
+            "Site markers": siteMarkers
         }
         L.control.layers(baseMaps, overlays).addTo(map);
 
         function embed(url) {
             if (url.includes(".mp4")) {
                 return `<video width="800" height="600" controls>
-							<source src="${url}" type="video/mp4">
-						</video>`;
+                            <source src="${url}" type="video/mp4">
+                        </video>`;
             } else {
                 return `<a href="${url}" target="_blank"><img width=800 height=600 src="${url}"></a>`
             }
@@ -221,15 +223,38 @@
                             L.circleMarker([row.lat, row.lng], { color: color }).addTo(map)
                                 .bindTooltip(`${filename}: ${depth}m`)
                                 .bindPopup(`<b>${filename}</b><br>
-									Date: ${row.date_loc}<br>
-									Time: ${row.time_loc}<br>
-									Depth: ${depth}m<br>
-									Temperature: ${row.temp}°C<br>
-									${embed(url)}
-								`, { maxWidth: 800 })
+                                    Date: ${row.date_loc}<br>
+                                    Time: ${row.time_loc}<br>
+                                    Depth: ${depth}m<br>
+                                    Temperature: ${row.temp}°C<br>
+                                    Latlong: ${row.lat},${row.lng}<br>
+                                    ${embed(url)}
+                                `, { maxWidth: 800 })
                         }
                     }
                 });
+            }
+        })
+
+        Papa.parse("https://dl.dropbox.com/s/0bhoqxrpw5mx401/Hauturu%20Site%20metadata.csv?dl=0", {
+            download: true,
+            header: true,
+            dynamicTyping: true,
+            skipEmptyLines: true,
+            complete: function (results) {
+                console.log(results);
+                for (var d of results.data) {
+                    if (d.visible) {
+                        L.marker([d.lat, d.lng])
+                            .bindTooltip(d.Site.toString(), { permanent: true })
+                            .bindPopup(`<b>Site: ${d.Site}</b><br>
+                                Date: ${d.date_loc}<br>
+                                Depth (min, mean, max): ${d.Mindepth.toFixed(2)}m, ${d.Avedepth.toFixed(2)}m, ${d.Maxdepth.toFixed(2)}m<br>
+                                Count: ${d.Count}<br>
+                                Latlong: ${d.lat},${d.lng}<br>`)
+                            .addTo(siteMarkers);
+                    }
+                }
             }
         })
 
