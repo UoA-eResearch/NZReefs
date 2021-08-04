@@ -245,16 +245,14 @@
             complete: function (results) {
                 console.log(results);
                 for (var d of results.data) {
-                    if (d.visible) {
-                        L.marker([d.lat, d.lng])
-                            .bindTooltip(d.Site.toString(), { permanent: true })
-                            .bindPopup(`<b>Site: ${d.Site}</b><br>
-                                Date: ${d.date_loc}<br>
-                                Depth (min, mean, max): ${d.Mindepth.toFixed(2)}m, ${d.Avedepth.toFixed(2)}m, ${d.Maxdepth.toFixed(2)}m<br>
-                                Count: ${d.Count}<br>
-                                Latlong: ${d.lat},${d.lng}<br>`)
-                            .addTo(siteMarkers);
-                    }
+                    L.marker([d.lat, d.lng])
+                        .bindTooltip(d.Site.toString(), { permanent: true })
+                        .bindPopup(`<b>Site: ${d.Site}</b><br>
+                            Date: ${d.date_loc}<br>
+                            Depth (mean, max): ${d.AveDepth.toFixed(2)}m, ${d.MaxDepth.toFixed(2)}m<br>
+                            Count: ${d.Count}<br>
+                            Latlong: ${d.lat},${d.lng}<br>`)
+                        .addTo(siteMarkers);
                 }
             }
         })
