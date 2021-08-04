@@ -65,7 +65,7 @@ MAP
 
     LAYER
         NAME "Hauturu2019_06_17_R1C2"
-        DATA "/mnt/Hauturu_colorshifted/2019-06-18/Hauturu2019_06_17_R1C2.tif"
+        DATA "/mnt/Hauturu_colorshifted/2019-06-17/Hauturu2019_06_17_R1C2.tif"
         TYPE RASTER
         PROJECTION
             "init=epsg:4326"
@@ -75,7 +75,7 @@ MAP
 
     LAYER
         NAME "Hauturu2019_06_17_R1C1"
-        DATA "/mnt/Hauturu_colorshifted/2019-06-18/Hauturu2019_06_17_R1C1.tif"
+        DATA "/mnt/Hauturu_colorshifted/2019-06-17/Hauturu2019_06_17_R1C1.tif"
         TYPE RASTER
         PROJECTION
             "init=epsg:4326"
@@ -85,7 +85,7 @@ MAP
 
     LAYER
         NAME "Hauturu2019_06_17_R2C2"
-        DATA "/mnt/Hauturu_colorshifted/2019-06-18/Hauturu2019_06_17_R2C2.tif"
+        DATA "/mnt/Hauturu_colorshifted/2019-06-17/Hauturu2019_06_17_R2C2.tif"
         TYPE RASTER
         PROJECTION
             "init=epsg:4326"
@@ -95,7 +95,7 @@ MAP
 
     LAYER
         NAME "Hauturu2019_06_17_R2C1"
-        DATA "/mnt/Hauturu_colorshifted/2019-06-18/Hauturu2019_06_17_R2C1.tif"
+        DATA "/mnt/Hauturu_colorshifted/2019-06-17/Hauturu2019_06_17_R2C1.tif"
         TYPE RASTER
         PROJECTION
             "init=epsg:4326"
