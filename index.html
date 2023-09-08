@@ -3,7 +3,7 @@
 
 <head>
 
-    <title>Hauturu / Little Barrier Island</title>
+    <title>NZ Reefs</title>
 
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,6 +18,9 @@
     <script src="https://unpkg.com/papaparse@5.3.0/papaparse.min.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet-draw@1.0.3/dist/leaflet.draw.css" />
     <script src="https://unpkg.com/leaflet-draw@1.0.3/dist/leaflet.draw.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <style>
         html,
@@ -64,7 +67,7 @@
 </head>
 
 <body>
-    <h1 id="title">Hauturu / Little Barrier Island</h1>
+    <h1 id="title">NZ Reefs</h1>
     <div id="map"></div>
     <script>
 
@@ -91,6 +94,12 @@
                 maxNativeZoom: 17,
                 subdomains: 'abcd',
                 attribution: 'Hydrographic chart &copy; <a href="https://data.linz.govt.nz/set/4759-south-island-charts/">LINZ</a>'
+            }).addTo(map),
+            "LINZ Basemap": L.tileLayer("https://basemaps.linz.govt.nz/v1/tiles/aerial/EPSG:3857/{z}/{x}/{y}.webp?api=d01eyvkkr9erajj4zpeqykezbgn", {
+                maxZoom: 23,
+                maxNativeZoom: 22,
+                subdomains: 'abcd',
+                attribution: 'Aerial imagery &copy; <a href="//www.linz.govt.nz/data/linz-data/linz-basemaps/data-attribution">LINZ</a>'
             }),
             "2013 aerial imagery": L.tileLayer("http://tiles-{s}.data-cdn.linz.govt.nz/services;key=e9447348492944328e52c333dbed4c0e/tiles/v4/layer=51769/EPSG:3857/{z}/{x}/{y}.png", {
                 pane: "colorshift",
@@ -184,6 +193,7 @@
         L.control.layers(baseMaps, overlays).addTo(map);
 
         function embed(url) {
+            if (!url) return "";
             if (url.includes(".mp4")) {
                 return `<video width="800" height="600" controls>
                             <source src="${url}" type="video/mp4">
@@ -193,47 +203,55 @@
             }
         }
 
+        function handle_results(results) {
+            console.log(results.data)
+            window.data = results.data
+            for (var row of results.data) {
+                if (!row.visible) continue;
+                var filename = row.filename
+                var url;
+                for (link of links.data) {
+                    if (link[0].includes(filename)) {
+                        url = link[0]
+                    }
+                }
+                if (!url) {
+                    console.warn(row.filename, "not found in dropbox_links.txt")
+                }
+                var color = "blue";
+                if (filename.endsWith(".mp4")) {
+                    color = "red";
+                }
+                var depth = row.depth.toFixed(2)
+                L.circleMarker([row.lat, row.lng], { color: color }).addTo(map)
+                    .bindTooltip(`${filename}: ${depth}m`)
+                    .bindPopup(`<b>${filename}</b><br>
+                            Date: ${row.date_loc}<br>
+                            Time: ${row.time_loc}<br>
+                            Depth: ${depth}m<br>
+                            Temperature: ${row.temp}°C<br>
+                            Latlong: ${row.lat},${row.lng}<br>
+                            ${embed(url)}
+                        `, { maxWidth: 800 })
+            }
+        }
+
         Papa.parse("dropbox_links.txt", {
             download: true,
             header: false,
             skipEmptyLines: true,
             complete: function (links) {
                 console.log(links.data);
-                Papa.parse("https://dl.dropbox.com/s/4wc592c8zjmnfqb/Hauturu2019.csv?dl=0", {
+                window.links = links;
+                var opts = {
                     download: true,
                     header: true,
                     dynamicTyping: true,
                     skipEmptyLines: true,
-                    complete: function (results) {
-                        console.log(results.data)
-                        window.data = results.data
-                        for (var row of results.data) {
-                            if (!row.visible) continue;
-                            var filename = row.filename
-                            var url;
-                            for (link of links.data) {
-                                if (link[0].includes(filename)) {
-                                    url = link[0]
-                                }
-                            }
-                            var color = "blue";
-                            if (filename.endsWith(".mp4")) {
-                                color = "red";
-                            }
-                            var depth = row.depth.toFixed(2)
-                            L.circleMarker([row.lat, row.lng], { color: color }).addTo(map)
-                                .bindTooltip(`${filename}: ${depth}m`)
-                                .bindPopup(`<b>${filename}</b><br>
-                                    Date: ${row.date_loc}<br>
-                                    Time: ${row.time_loc}<br>
-                                    Depth: ${depth}m<br>
-                                    Temperature: ${row.temp}°C<br>
-                                    Latlong: ${row.lat},${row.lng}<br>
-                                    ${embed(url)}
-                                `, { maxWidth: 800 })
-                        }
-                    }
-                });
+                    complete: handle_results
+                }
+                Papa.parse("https://dl.dropbox.com/s/4wc592c8zjmnfqb/Hauturu2019.csv?dl=0", opts);
+                Papa.parse('https://corsproxy.io/?' + encodeURIComponent('https://www.dropbox.com/e/scl/fi/7iq63fka3kwb0nos2wb00/PKI-2019-BPS-metadata.csv?rlkey=8tb4wu3vg1qk9gpdbnfqmlryt&raw=1'), opts);
             }
         })
 
@@ -256,6 +274,38 @@
                 }
             }
         })
+
+        var legend = L.control({ position: 'bottomright' });
+
+        legend.onAdd = function (map) {
+            var div = L.DomUtil.create('div', 'info legend');
+            div.innerHTML = `<button>Hauturu</button>
+                             <button>Poor Knights Island</button>
+            `;
+            return div;
+        };
+
+        legend.addTo(map);
+        $("button").click(function () {
+            var name = $(this).text();
+            console.log(`Clicked ${name}`)
+            if (name == "Hauturu") {
+                baseMaps["2018 satellite imagery"].addTo(map)
+                map.flyToBounds([
+                    [-36.29229901904709, 174.9910926818848],
+                    [-36.10834017018422, 175.1804351806641]
+                ])
+            } else if (name == "Poor Knights Island") {
+                baseMaps["Hydrographic chart"].addTo(map)
+                map.flyToBounds([
+                    [-35.515251356189175, 174.68785285949707],
+                    [-35.422419933337785, 174.78252410888675]
+                ])
+            } else {
+                console.error(`No handler for ${name}`)
+            }
+        })
+
 
     </script>
 </body>
