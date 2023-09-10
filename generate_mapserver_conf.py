@@ -2,7 +2,7 @@
 
 from glob import glob
 from os.path import basename, splitext
-files = glob("/mnt/Hauturu_colorshifted/*/*.tif")
+files = glob("/mnt/NZReefs/**/*.tif", recursive=True)
 
 print("""MAP
     PROJECTION
@@ -24,7 +24,7 @@ for filepath in files:
 print("""
     WEB
         METADATA
-            "wms_title" "Hauturu imagery"
+            "wms_title" "NZReefs imagery"
             "wms_enable_request"  "*"
         END
     END

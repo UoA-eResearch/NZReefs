@@ -4,8 +4,28 @@ MAP
     END
 
     LAYER
+        NAME "20230719_South_Harbour"
+        DATA "/mnt/NZReefs/PKI/20230719_South_Harbour.tif"
+        TYPE RASTER
+        PROJECTION
+            "init=epsg:4326"
+        END
+        STATUS ON
+    END
+
+    LAYER
+        NAME "20230719_Bartles_Bay"
+        DATA "/mnt/NZReefs/PKI/20230719_Bartles_Bay.tif"
+        TYPE RASTER
+        PROJECTION
+            "init=epsg:4326"
+        END
+        STATUS ON
+    END
+
+    LAYER
         NAME "Hauturu_2018_10_23_R2C1"
-        DATA "/mnt/Hauturu_colorshifted/2018-10-23/Hauturu_2018_10_23_R2C1.tif"
+        DATA "/mnt/NZReefs/Hauturu_colorshifted/2018-10-23/Hauturu_2018_10_23_R2C1.tif"
         TYPE RASTER
         PROJECTION
             "init=epsg:4326"
@@ -15,7 +35,7 @@ MAP
 
     LAYER
         NAME "Hauturu_2018_10_23_R1C3"
-        DATA "/mnt/Hauturu_colorshifted/2018-10-23/Hauturu_2018_10_23_R1C3.tif"
+        DATA "/mnt/NZReefs/Hauturu_colorshifted/2018-10-23/Hauturu_2018_10_23_R1C3.tif"
         TYPE RASTER
         PROJECTION
             "init=epsg:4326"
@@ -25,7 +45,7 @@ MAP
 
     LAYER
         NAME "Hauturu_2018_10_23_R2C3"
-        DATA "/mnt/Hauturu_colorshifted/2018-10-23/Hauturu_2018_10_23_R2C3.tif"
+        DATA "/mnt/NZReefs/Hauturu_colorshifted/2018-10-23/Hauturu_2018_10_23_R2C3.tif"
         TYPE RASTER
         PROJECTION
             "init=epsg:4326"
@@ -35,7 +55,7 @@ MAP
 
     LAYER
         NAME "Hauturu_2018_10_23_R2C2"
-        DATA "/mnt/Hauturu_colorshifted/2018-10-23/Hauturu_2018_10_23_R2C2.tif"
+        DATA "/mnt/NZReefs/Hauturu_colorshifted/2018-10-23/Hauturu_2018_10_23_R2C2.tif"
         TYPE RASTER
         PROJECTION
             "init=epsg:4326"
@@ -45,7 +65,7 @@ MAP
 
     LAYER
         NAME "Hauturu_2018_10_23_R1C1"
-        DATA "/mnt/Hauturu_colorshifted/2018-10-23/Hauturu_2018_10_23_R1C1.tif"
+        DATA "/mnt/NZReefs/Hauturu_colorshifted/2018-10-23/Hauturu_2018_10_23_R1C1.tif"
         TYPE RASTER
         PROJECTION
             "init=epsg:4326"
@@ -55,7 +75,7 @@ MAP
 
     LAYER
         NAME "Hauturu_2018_10_23_R1C2"
-        DATA "/mnt/Hauturu_colorshifted/2018-10-23/Hauturu_2018_10_23_R1C2.tif"
+        DATA "/mnt/NZReefs/Hauturu_colorshifted/2018-10-23/Hauturu_2018_10_23_R1C2.tif"
         TYPE RASTER
         PROJECTION
             "init=epsg:4326"
@@ -65,7 +85,7 @@ MAP
 
     LAYER
         NAME "Hauturu2019_06_17_R1C2"
-        DATA "/mnt/Hauturu_colorshifted/2019-06-17/Hauturu2019_06_17_R1C2.tif"
+        DATA "/mnt/NZReefs/Hauturu_colorshifted/2019-06-17/Hauturu2019_06_17_R1C2.tif"
         TYPE RASTER
         PROJECTION
             "init=epsg:4326"
@@ -75,7 +95,7 @@ MAP
 
     LAYER
         NAME "Hauturu2019_06_17_R1C1"
-        DATA "/mnt/Hauturu_colorshifted/2019-06-17/Hauturu2019_06_17_R1C1.tif"
+        DATA "/mnt/NZReefs/Hauturu_colorshifted/2019-06-17/Hauturu2019_06_17_R1C1.tif"
         TYPE RASTER
         PROJECTION
             "init=epsg:4326"
@@ -85,7 +105,7 @@ MAP
 
     LAYER
         NAME "Hauturu2019_06_17_R2C2"
-        DATA "/mnt/Hauturu_colorshifted/2019-06-17/Hauturu2019_06_17_R2C2.tif"
+        DATA "/mnt/NZReefs/Hauturu_colorshifted/2019-06-17/Hauturu2019_06_17_R2C2.tif"
         TYPE RASTER
         PROJECTION
             "init=epsg:4326"
@@ -95,7 +115,7 @@ MAP
 
     LAYER
         NAME "Hauturu2019_06_17_R2C1"
-        DATA "/mnt/Hauturu_colorshifted/2019-06-17/Hauturu2019_06_17_R2C1.tif"
+        DATA "/mnt/NZReefs/Hauturu_colorshifted/2019-06-17/Hauturu2019_06_17_R2C1.tif"
         TYPE RASTER
         PROJECTION
             "init=epsg:4326"
@@ -105,7 +125,7 @@ MAP
 
     WEB
         METADATA
-            "wms_title" "Hauturu imagery"
+            "wms_title" "NZReefs imagery"
             "wms_enable_request"  "*"
         END
     END
