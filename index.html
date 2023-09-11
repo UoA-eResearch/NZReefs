@@ -85,7 +85,7 @@
         map.setMaxBounds(bounds);
 
         map.createPane('colorshift');
-        map.getPane('colorshift').style.zIndex = 200; // same as tilePane
+        map.getPane('colorshift').style.zIndex = 100; // same as tilePane
         map.getPane('colorshift').style.filter = 'contrast(138%) brightness(163%) saturate(168%)';
 
         var baseMaps = {
@@ -108,27 +108,6 @@
                 subdomains: 'abcd',
                 attribution: 'Aerial imagery &copy; <a href="//www.linz.govt.nz/data/linz-data/linz-basemaps/data-attribution">LINZ</a>'
             }),
-            "Hauturu 2018 satellite imagery": L.tileLayer.wms('https://api-proxy.auckland-cer.cloud.edu.au/cgi-bin/mapserv?MAP=/home/ubuntu/NZReefs/mapserver.map', {
-                //pane: "colorshift",
-                layers: "Hauturu_2018_10_23_R1C1,Hauturu_2018_10_23_R1C3,Hauturu_2018_10_23_R2C2,Hauturu_2018_10_23_R1C2,Hauturu_2018_10_23_R2C1,Hauturu_2018_10_23_R2C3",
-                format: 'image/png',
-                transparent: true,
-                maxZoom: 23,
-            }).addTo(map),
-            "Hauturu 2019 satellite imagery": L.tileLayer.wms('https://api-proxy.auckland-cer.cloud.edu.au/cgi-bin/mapserv?MAP=/home/ubuntu/NZReefs/mapserver.map', {
-                //pane: "colorshift",
-                layers: "Hauturu2019_06_17_R1C1,Hauturu2019_06_17_R1C2,Hauturu2019_06_17_R2C1,Hauturu2019_06_17_R2C2",
-                format: 'image/png',
-                transparent: true,
-                maxZoom: 23,
-            }),
-            "Poor Knights 2023 drone imagery": L.tileLayer.wms('https://api-proxy.auckland-cer.cloud.edu.au/cgi-bin/mapserv?MAP=/home/ubuntu/NZReefs/mapserver.map', {
-                //pane: "colorshift",
-                layers: "20230719_South_Harbour,20230719_Bartles_Bay",
-                format: 'image/png',
-                transparent: true,
-                maxZoom: 23,
-            }).addTo(map),
             "ESRI WorldImagery": L.tileLayer.provider("Esri.WorldImagery", {
                 pane: "colorshift",
             }),
@@ -195,8 +174,29 @@
         var mediaMarkers = L.layerGroup().addTo(map)
         var siteMarkers = L.layerGroup().addTo(map)
         var overlays = {
+            "Hauturu 2018 satellite imagery": L.tileLayer.wms('https://api-proxy.auckland-cer.cloud.edu.au/cgi-bin/mapserv?MAP=/home/ubuntu/NZReefs/mapserver.map', {
+                //pane: "colorshift",
+                layers: "Hauturu_2018_10_23_R1C1,Hauturu_2018_10_23_R1C3,Hauturu_2018_10_23_R2C2,Hauturu_2018_10_23_R1C2,Hauturu_2018_10_23_R2C1,Hauturu_2018_10_23_R2C3",
+                format: 'image/png',
+                transparent: true,
+                maxZoom: 23,
+            }).addTo(map),
+            "Hauturu 2019 satellite imagery": L.tileLayer.wms('https://api-proxy.auckland-cer.cloud.edu.au/cgi-bin/mapserv?MAP=/home/ubuntu/NZReefs/mapserver.map', {
+                //pane: "colorshift",
+                layers: "Hauturu2019_06_17_R1C1,Hauturu2019_06_17_R1C2,Hauturu2019_06_17_R2C1,Hauturu2019_06_17_R2C2",
+                format: 'image/png',
+                transparent: true,
+                maxZoom: 23,
+            }),
+            "Poor Knights 2023 drone imagery": L.tileLayer.wms('https://api-proxy.auckland-cer.cloud.edu.au/cgi-bin/mapserv?MAP=/home/ubuntu/NZReefs/mapserver.map', {
+                //pane: "colorshift",
+                layers: "20230719_South_Harbour,20230719_Bartles_Bay",
+                format: 'image/png',
+                transparent: true,
+                maxZoom: 23,
+            }).addTo(map),
             "Drawn items": editableLayers,
-            "Site markers": siteMarkers,
+            "Hauturu site markers": siteMarkers,
             "Media markers": mediaMarkers
         }
         L.control.layers(baseMaps, overlays).addTo(map);
@@ -299,14 +299,11 @@
             var name = $(this).text();
             console.log(`Clicked ${name}`)
             if (name == "Hauturu / Little Barrier Island") {
-                baseMaps["Hauturu 2018 satellite imagery"].addTo(map)
                 map.flyToBounds([
                     [-36.29229901904709, 174.9910926818848],
                     [-36.10834017018422, 175.1804351806641]
                 ])
             } else if (name == "Tawhiti Rahi / Poor Knights Islands") {
-                baseMaps["Hydrographic chart"].addTo(map)
-                baseMaps["Poor Knights 2023 drone imagery"].addTo(map)
                 map.flyToBounds([
                     [-35.515251356189175, 174.68785285949707],
                     [-35.422419933337785, 174.78252410888675]
