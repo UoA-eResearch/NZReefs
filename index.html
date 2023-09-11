@@ -18,6 +18,8 @@
     <script src="https://unpkg.com/papaparse@5.3.0/papaparse.min.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet-draw@1.0.3/dist/leaflet.draw.css" />
     <script src="https://unpkg.com/leaflet-draw@1.0.3/dist/leaflet.draw.js"></script>
+    <link rel="stylesheet" href="https://prominentedge.com/leaflet-measure-path/leaflet-measure-path.css" />
+    <script src="https://prominentedge.com/leaflet-measure-path/leaflet-measure-path.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
         integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -84,6 +86,8 @@
         bounds._southWest.lng -= 10;
         map.setMaxBounds(bounds);
 
+        L.control.scale({position: 'bottomleft'}).addTo(map);
+
         map.createPane('colorshift');
         map.getPane('colorshift').style.zIndex = 100; // same as tilePane
         map.getPane('colorshift').style.filter = 'contrast(138%) brightness(163%) saturate(168%)';
@@ -133,7 +137,9 @@
                     allowIntersection: true, // Restricts shapes to simple polygons
                     shapeOptions: {
                         color: '#bada55'
-                    }
+                    },
+                    showArea: true,
+                    showLength: true,
                 },
                 rectangle: {
                     showArea: true,
@@ -153,12 +159,14 @@
             console.log("created", e)
             var type = e.layerType,
                 layer = e.layer;
+            layer.type = type;
 
             if (type === 'marker') {
                 layer.bindPopup('A popup!');
             }
-
-            editableLayers.addLayer(layer);
+            
+            layer.addTo(editableLayers)
+            if (type == "polyline") layer.showMeasurements()
         });
         map.on(L.Draw.Event.EDITSTART, function () {
             console.log("editstart");
@@ -169,6 +177,9 @@
         });
         map.on(L.Draw.Event.EDITED, function (e) {
             console.log("edited", e)
+            e.layers.eachLayer(function(layer) {
+                if (layer.type == "polyline") layer.updateMeasurements()
+            })
         });
 
         var mediaMarkers = L.layerGroup().addTo(map)
