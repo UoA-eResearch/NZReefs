@@ -40,19 +40,10 @@
         }
 
         #title {
-            position: absolute;
-            top: 30px;
-            left: 0;
-            right: 0;
-            margin: auto;
-            z-index: 1000;
-            width: 50%;
             text-align: center;
             color: white;
-            border-radius: 5px;
             padding: 10px;
             background-color: rgba(0, 0, 0, 0.8);
-            font-family: Arial, Helvetica, sans-serif;
             text-shadow: 2px 2px #000000;
             font-weight: normal;
             font-size: 1rem;
@@ -74,7 +65,6 @@
 </head>
 
 <body>
-    <h1 id="title">NZ Reefs</h1>
     <div id="map"></div>
     <script>
 
@@ -304,7 +294,7 @@
 
         legend.onAdd = function (map) {
             var div = L.DomUtil.create('div', 'info legend');
-            div.innerHTML = `
+            div.innerHTML = `<h4 id="title">NZ Reefs</h4>
                 <div class="btn-group-vertical" role="group" aria-label="Area buttons">
                     <button type="button" class="btn btn-outline-primary">Hauturu / Little Barrier Island</button>
                     <button type="button" class="btn btn-outline-primary">Tawhiti Rahi / Poor Knights Islands</button>
