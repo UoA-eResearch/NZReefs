@@ -192,10 +192,12 @@
             console.log("edited", e)
         });
 
+        var mediaMarkers = L.layerGroup().addTo(map)
         var siteMarkers = L.layerGroup().addTo(map)
         var overlays = {
             "Drawn items": editableLayers,
-            "Site markers": siteMarkers
+            "Site markers": siteMarkers,
+            "Media markers": mediaMarkers
         }
         L.control.layers(baseMaps, overlays).addTo(map);
 
@@ -230,7 +232,7 @@
                     color = "red";
                 }
                 var depth = row.depth.toFixed(2)
-                L.circleMarker([row.lat, row.lng], { color: color }).addTo(map)
+                L.circleMarker([row.lat, row.lng], { color: color }).addTo(mediaMarkers)
                     .bindTooltip(`${filename}: ${depth}m`)
                     .bindPopup(`<b>${filename}</b><br>
                             Date: ${row.date_loc}<br>
