@@ -10,7 +10,7 @@ from tqdm.contrib.concurrent import thread_map
 
 # From https://www.dropbox.com/developers/apps
 DROPBOX_TOKEN = os.environ["DROPBOX_TOKEN"]
-SHARED_LINK = "https://www.dropbox.com/sh/c7ui0gcxrivke6e/AADUnHIeg-_ksp6XzEbU5wOva?dl=0"
+SHARED_LINK = "https://www.dropbox.com/sh/qtgta9trakhwarm/AACI70fgFHYOYexvsdv6PwWua?dl=0"
 dbx = Dropbox(DROPBOX_TOKEN)
 
 

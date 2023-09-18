@@ -267,6 +267,7 @@
                 }
                 Papa.parse("https://dl.dropbox.com/s/4wc592c8zjmnfqb/Hauturu2019.csv?dl=0", opts);
                 Papa.parse('https://corsproxy.io/?' + encodeURIComponent('https://www.dropbox.com/e/scl/fi/7iq63fka3kwb0nos2wb00/PKI-2019-BPS-metadata.csv?rlkey=8tb4wu3vg1qk9gpdbnfqmlryt&raw=1'), opts);
+                Papa.parse('https://corsproxy.io/?' + encodeURIComponent("https://www.dropbox.com/e/scl/fi/zxev5wzrqpql0j4nop8bc/mokes.csv?rlkey=pl2lciit7gc1s4shkm7exztct&raw=1"), opts)
             }
         })
 
@@ -290,17 +291,25 @@
             }
         })
 
+        // map.getBounds().toBBoxString()
+        var sites = {
+            "Hauturu / Little Barrier Island": '174.9807929992676,-36.27251097090326,175.19090652465823,-36.13316102875893',
+            "Tawhiti Rahi / Poor Knights Islands": '174.68647956848145,-35.50700711950567,174.7915363311768,-35.43668714749055',
+            "Mokohinau Islands": '175.08215904235843,-35.928501952502764,175.13468742370605,-35.8935350274884'
+        }
+
         var legend = L.control({ position: 'bottomright' });
 
         legend.onAdd = function (map) {
             var div = L.DomUtil.create('div', 'info legend');
-            div.innerHTML = `<h4 id="title">NZ Reefs</h4>
+            var html = `<h4 id="title">NZ Reefs</h4>
                 <div class="btn-group-vertical" role="group" aria-label="Area buttons">
-                    <button type="button" class="btn btn-outline-primary">Hauturu / Little Barrier Island</button>
-                    <button type="button" class="btn btn-outline-primary">Tawhiti Rahi / Poor Knights Islands</button>
-                    <a role="button" class="btn btn-outline-primary" href="https://uoa-eresearch.github.io/Queen_Charlotte_Sound/">Tōtaranui / Queen Charlotte Sound</a>
-                </div>
             `;
+            for (var site in sites) {
+                html += `<button type="button" class="btn btn-outline-primary">${site}</button>`
+            }
+            html += `<a role="button" class="btn btn-outline-primary" href="https://uoa-eresearch.github.io/Queen_Charlotte_Sound/">Tōtaranui / Queen Charlotte Sound</a>`
+            div.innerHTML = html
             return div;
         };
 
@@ -308,19 +317,11 @@
         $("button").click(function () {
             var name = $(this).text();
             console.log(`Clicked ${name}`)
-            if (name == "Hauturu / Little Barrier Island") {
-                map.flyToBounds([
-                    [-36.29229901904709, 174.9910926818848],
-                    [-36.10834017018422, 175.1804351806641]
-                ])
-            } else if (name == "Tawhiti Rahi / Poor Knights Islands") {
-                map.flyToBounds([
-                    [-35.515251356189175, 174.68785285949707],
-                    [-35.422419933337785, 174.78252410888675]
-                ])
-            } else {
-                console.error(`No handler for ${name}`)
-            }
+            var b = sites[name].split(",")
+            map.flyToBounds([
+                [b[1], b[0]],
+                [b[3], b[2]]
+            ])
         })
 
 
