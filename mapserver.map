@@ -24,6 +24,36 @@ MAP
     END
 
     LAYER
+        NAME "20230818_Mokes_SE"
+        DATA "/mnt/NZReefs/Mokes/20230818_Mokes_SE.tif"
+        TYPE RASTER
+        PROJECTION
+            "init=epsg:4326"
+        END
+        STATUS ON
+    END
+
+    LAYER
+        NAME "07022023_Lizard_Is (1)"
+        DATA "/mnt/NZReefs/Mokes/07022023_Lizard_Is (1).tif"
+        TYPE RASTER
+        PROJECTION
+            "init=epsg:4326"
+        END
+        STATUS ON
+    END
+
+    LAYER
+        NAME "07022023_SW_Bay (1)"
+        DATA "/mnt/NZReefs/Mokes/07022023_SW_Bay (1).tif"
+        TYPE RASTER
+        PROJECTION
+            "init=epsg:4326"
+        END
+        STATUS ON
+    END
+
+    LAYER
         NAME "Hauturu_2018_10_23_R2C1"
         DATA "/mnt/NZReefs/Hauturu_colorshifted/2018-10-23/Hauturu_2018_10_23_R2C1.tif"
         TYPE RASTER

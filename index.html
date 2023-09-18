@@ -201,6 +201,13 @@
                 transparent: true,
                 maxZoom: 23,
             }).addTo(map),
+            "Mokohinau Islands 2023 drone imagery": L.tileLayer.wms('https://api-proxy.auckland-cer.cloud.edu.au/cgi-bin/mapserv?MAP=/home/ubuntu/NZReefs/mapserver.map', {
+                //pane: "colorshift",
+                layers: "20230818_Mokes_SE,07022023_Lizard_Is (1),07022023_SW_Bay (1)",
+                format: 'image/png',
+                transparent: true,
+                maxZoom: 23,
+            }).addTo(map),
             "Drawn items": editableLayers,
             "Hauturu site markers": siteMarkers,
             "Media markers": mediaMarkers
