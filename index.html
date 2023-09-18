@@ -28,6 +28,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
         crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/esri-leaflet/3.0.11/esri-leaflet.js" integrity="sha512-qSE34Lz9JHdaPt3AZsi6L3dcqYHO9nnQEIxfrkgrRqqe+R0DPuAMu+j2vlb92zPka9O+XHZV4+9G5/rHT5ADsQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <style>
         html,
@@ -177,6 +178,21 @@
             })
         });
 
+        // map.getBounds().toBBoxString()
+        var sites = {
+            "Hauturu / Little Barrier Island": '174.9807929992676,-36.27251097090326,175.19090652465823,-36.13316102875893',
+            "Tawhiti Rahi / Poor Knights Islands": '174.68647956848145,-35.50700711950567,174.7915363311768,-35.43668714749055',
+            "Mokohinau Islands": '175.08215904235843,-35.928501952502764,175.13468742370605,-35.8935350274884'
+        }
+
+        for (var site in sites) {
+            var b = sites[site].split(",")
+            sites[site] = L.latLngBounds([
+                [b[1], b[0]],
+                [b[3], b[2]]
+            ])
+        }
+
         var mediaMarkers = L.layerGroup().addTo(map)
         var siteMarkers = L.layerGroup().addTo(map)
         var overlays = {
@@ -186,6 +202,7 @@
                 format: 'image/png',
                 transparent: true,
                 maxZoom: 23,
+                bounds: sites["Hauturu / Little Barrier Island"]
             }).addTo(map),
             "Hauturu 2019 satellite imagery": L.tileLayer.wms('https://api-proxy.auckland-cer.cloud.edu.au/cgi-bin/mapserv?MAP=/home/ubuntu/NZReefs/mapserver.map', {
                 //pane: "colorshift",
@@ -193,20 +210,19 @@
                 format: 'image/png',
                 transparent: true,
                 maxZoom: 23,
+                bounds: sites["Hauturu / Little Barrier Island"]
             }),
-            "Poor Knights 2023 drone imagery": L.tileLayer.wms('https://api-proxy.auckland-cer.cloud.edu.au/cgi-bin/mapserv?MAP=/home/ubuntu/NZReefs/mapserver.map', {
-                //pane: "colorshift",
-                layers: "20230719_South_Harbour,20230719_Bartles_Bay",
-                format: 'image/png',
-                transparent: true,
+            "Poor Knights 2023 drone imagery": L.esri.tiledMapLayer({
+                url: "https://tiles.arcgis.com/tiles/OKRmMRUG6dRnfUBh/arcgis/rest/services/Poor_Knights_Island_2023_drone_imagery/MapServer",
+                minNativeZoom: 15,
                 maxZoom: 23,
+                bounds: sites["Tawhiti Rahi / Poor Knights Islands"]
             }).addTo(map),
-            "Mokohinau Islands 2023 drone imagery": L.tileLayer.wms('https://api-proxy.auckland-cer.cloud.edu.au/cgi-bin/mapserv?MAP=/home/ubuntu/NZReefs/mapserver.map', {
-                //pane: "colorshift",
-                layers: "20230818_Mokes_SE,07022023_Lizard_Is (1),07022023_SW_Bay (1)",
-                format: 'image/png',
-                transparent: true,
+            "Mokohinau Islands 2023 drone imagery": L.esri.tiledMapLayer({
+                url: "https://tiles.arcgis.com/tiles/OKRmMRUG6dRnfUBh/arcgis/rest/services/Mokohinau_Islands_2023_drone_imagery_EPSG_3857/MapServer",
+                minNativeZoom: 15,
                 maxZoom: 23,
+                bounds: sites["Mokohinau Islands"]
             }).addTo(map),
             "Drawn items": editableLayers,
             "Hauturu site markers": siteMarkers,
@@ -298,13 +314,6 @@
             }
         })
 
-        // map.getBounds().toBBoxString()
-        var sites = {
-            "Hauturu / Little Barrier Island": '174.9807929992676,-36.27251097090326,175.19090652465823,-36.13316102875893',
-            "Tawhiti Rahi / Poor Knights Islands": '174.68647956848145,-35.50700711950567,174.7915363311768,-35.43668714749055',
-            "Mokohinau Islands": '175.08215904235843,-35.928501952502764,175.13468742370605,-35.8935350274884'
-        }
-
         var legend = L.control({ position: 'bottomright' });
 
         legend.onAdd = function (map) {
@@ -324,11 +333,7 @@
         $("button").click(function () {
             var name = $(this).text();
             console.log(`Clicked ${name}`)
-            var b = sites[name].split(",")
-            map.flyToBounds([
-                [b[1], b[0]],
-                [b[3], b[2]]
-            ])
+            map.flyToBounds(sites[name])
         })
 
 
