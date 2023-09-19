@@ -196,19 +196,17 @@
         var mediaMarkers = L.layerGroup().addTo(map)
         var siteMarkers = L.layerGroup().addTo(map)
         var overlays = {
-            "Hauturu 2018 satellite imagery": L.tileLayer.wms('https://api-proxy.auckland-cer.cloud.edu.au/cgi-bin/mapserv?MAP=/home/ubuntu/NZReefs/mapserver.map', {
-                //pane: "colorshift",
-                layers: "Hauturu_2018_10_23_R1C1,Hauturu_2018_10_23_R1C3,Hauturu_2018_10_23_R2C2,Hauturu_2018_10_23_R1C2,Hauturu_2018_10_23_R2C1,Hauturu_2018_10_23_R2C3",
-                format: 'image/png',
-                transparent: true,
+            "Hauturu 2018 satellite imagery": L.esri.tiledMapLayer({
+                url: "https://tiles.arcgis.com/tiles/OKRmMRUG6dRnfUBh/arcgis/rest/services/Hauturu_2018_merged_colorshifted/MapServer",
+                minNativeZoom: 15,
+                maxNativeZoom: 19,
                 maxZoom: 23,
                 bounds: sites["Hauturu / Little Barrier Island"]
             }).addTo(map),
-            "Hauturu 2019 satellite imagery": L.tileLayer.wms('https://api-proxy.auckland-cer.cloud.edu.au/cgi-bin/mapserv?MAP=/home/ubuntu/NZReefs/mapserver.map', {
-                //pane: "colorshift",
-                layers: "Hauturu2019_06_17_R1C1,Hauturu2019_06_17_R1C2,Hauturu2019_06_17_R2C1,Hauturu2019_06_17_R2C2",
-                format: 'image/png',
-                transparent: true,
+            "Hauturu 2019 satellite imagery": L.esri.tiledMapLayer({
+                url: "https://tiles.arcgis.com/tiles/OKRmMRUG6dRnfUBh/arcgis/rest/services/Hauturu_2019/MapServer",
+                minNativeZoom: 15,
+                maxNativeZoom: 19,
                 maxZoom: 23,
                 bounds: sites["Hauturu / Little Barrier Island"]
             }),
