@@ -182,7 +182,8 @@
         var sites = {
             "Hauturu / Little Barrier Island": '174.9807929992676,-36.27251097090326,175.19090652465823,-36.13316102875893',
             "Tawhiti Rahi / Poor Knights Islands": '174.68647956848145,-35.50700711950567,174.7915363311768,-35.43668714749055',
-            "Mokohinau Islands": '175.08215904235843,-35.928501952502764,175.13468742370605,-35.8935350274884'
+            "Mokohinau Islands": '175.08215904235843,-35.928501952502764,175.13468742370605,-35.8935350274884',
+            "Tuhua Island / Mayor Island": '176.21872901916507,-37.32095999932932,176.2907409667969,-37.25226209009125',
         }
 
         for (var site in sites) {
@@ -222,6 +223,12 @@
                 maxZoom: 23,
                 bounds: sites["Mokohinau Islands"]
             }).addTo(map),
+            "Tuhua Island 2023 drone imagery": L.esri.tiledMapLayer({
+                url: "https://tiles.arcgis.com/tiles/OKRmMRUG6dRnfUBh/arcgis/rest/services/Hotsprings_Ortho/MapServer",
+                minNativeZoom: 15,
+                maxZoom: 23,
+                bounds: sites["Tuhua Island"]
+            }).addTo(map),
             "Drawn items": editableLayers,
             "Hauturu site markers": siteMarkers,
             "Media markers": mediaMarkers
@@ -239,56 +246,80 @@
             }
         }
 
-        function handle_results(results) {
-            console.log(results.data)
-            window.data = results.data
-            for (var row of results.data) {
-                if (!row.visible) continue;
-                var filename = row.filename
-                var url;
-                for (link of links.data) {
-                    if (link[0].includes(filename)) {
-                        url = link[0]
+        function parse_CSV(csv) {
+            // Fix CORS
+            csv.link = 'https://corsproxy.io/?' + encodeURIComponent(csv.link)
+            Papa.parse(csv.link, {
+                download: true,
+                header: true,
+                dynamicTyping: true,
+                skipEmptyLines: true,
+                complete: function(results) {
+                    console.log(csv, results.data)
+                    window.data = results.data
+                    for (var row of results.data) {
+                        if (!row.visible) continue;
+                        var filename = row.filename || row.FileName
+                        if (filename) {
+                            var url = "";
+                            if (csv.path == "/NZReefs/Hauturu/Hauturu2019.csv") {
+                                filename = "/NZReefs/Hauturu/imagescorrect/" + filename
+                            } else if (csv.path == "/NZReefs/Mokes 2023/mokes.csv") {
+                                filename = "/NZReefs/Mokes 2023/Mokes bps images Aug 2023/" + filename
+                            } else if (csv.path.endsWith("navdata.csv")) {
+                                var path = csv.path.split("/").slice(0, -1).join("/")
+                                filename = path + "/images/" + filename
+                            }
+                            var candidates = []
+                            for (link of links) {
+                                if (link.path.endsWith(filename)) {
+                                    candidates.push(link)
+                                }
+                            }
+                            if (candidates.length == 0) {
+                                console.warn(filename, "not found in dropbox_links.csv")
+                            } else if (candidates.length > 1) {
+                                console.warn(filename, "ambiguous", candidates)
+                            }
+                            var url = candidates[0]?.link
+                        }
+                        var color = "blue";
+                        if (filename.endsWith(".mp4")) {
+                            color = "red";
+                        }
+                        var depth = row.depth || row.GPSDepth_m
+                        if (depth) {
+                            depth = depth.toFixed(2)
+                        }
+                        L.circleMarker([row.lat || row.GPSLatitude, row.lng || row.GPSLongitude], { color: color }).addTo(mediaMarkers)
+                            .bindTooltip(`${filename}: ${depth}m`)
+                            .bindPopup(`<b>${filename}</b><br>
+                                    Date: ${row.date_loc || row.timestamp_start_local}<br>
+                                    Time: ${row.time_loc || row.timestamp_start_local}<br>
+                                    Depth: ${depth}m<br>
+                                    Temperature: ${row.temp}°C<br>
+                                    Latlong: ${row.lat || row.GPSLatitude},${row.lng || row.GPSLongitude}<br>
+                                    ${embed(url)}
+                                `, { maxWidth: 800 })
                     }
                 }
-                if (!url) {
-                    console.warn(row.filename, "not found in dropbox_links.txt")
-                }
-                var color = "blue";
-                if (filename.endsWith(".mp4")) {
-                    color = "red";
-                }
-                var depth = row.depth.toFixed(2)
-                L.circleMarker([row.lat, row.lng], { color: color }).addTo(mediaMarkers)
-                    .bindTooltip(`${filename}: ${depth}m`)
-                    .bindPopup(`<b>${filename}</b><br>
-                            Date: ${row.date_loc}<br>
-                            Time: ${row.time_loc}<br>
-                            Depth: ${depth}m<br>
-                            Temperature: ${row.temp}°C<br>
-                            Latlong: ${row.lat},${row.lng}<br>
-                            ${embed(url)}
-                        `, { maxWidth: 800 })
-            }
+            });
         }
 
-        Papa.parse("dropbox_links.txt", {
+        Papa.parse("dropbox_links.csv", {
             download: true,
-            header: false,
+            header: true,
+            dynamicTyping: true,
             skipEmptyLines: true,
             complete: function (links) {
                 console.log(links.data);
-                window.links = links;
-                var opts = {
-                    download: true,
-                    header: true,
-                    dynamicTyping: true,
-                    skipEmptyLines: true,
-                    complete: handle_results
+                window.links = links.data;
+                const regex = /(Hauturu2019\.csv|PKI-2019-BPS-metadata\.csv|mokes\.csv|navdata\.csv)/;
+                var csvs = links.data.filter(l => regex.test(l.path))
+                console.log(csvs)
+                for (var csv of csvs) {
+                    parse_CSV(csv)
                 }
-                Papa.parse("https://dl.dropbox.com/s/4wc592c8zjmnfqb/Hauturu2019.csv?dl=0", opts);
-                Papa.parse('https://corsproxy.io/?' + encodeURIComponent('https://www.dropbox.com/e/scl/fi/7iq63fka3kwb0nos2wb00/PKI-2019-BPS-metadata.csv?rlkey=8tb4wu3vg1qk9gpdbnfqmlryt&raw=1'), opts);
-                Papa.parse('https://corsproxy.io/?' + encodeURIComponent("https://www.dropbox.com/e/scl/fi/zxev5wzrqpql0j4nop8bc/mokes.csv?rlkey=pl2lciit7gc1s4shkm7exztct&raw=1"), opts)
             }
         })
 
