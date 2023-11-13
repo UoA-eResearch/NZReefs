@@ -199,6 +199,7 @@
         var overlays = {
             "Hauturu 2018 satellite imagery": L.esri.tiledMapLayer({
                 url: "https://tiles.arcgis.com/tiles/OKRmMRUG6dRnfUBh/arcgis/rest/services/Hauturu_2018_merged_colorshifted/MapServer",
+                minZoom: 10,
                 minNativeZoom: 15,
                 maxNativeZoom: 19,
                 maxZoom: 23,
@@ -206,6 +207,7 @@
             }).addTo(map),
             "Hauturu 2019 satellite imagery": L.esri.tiledMapLayer({
                 url: "https://tiles.arcgis.com/tiles/OKRmMRUG6dRnfUBh/arcgis/rest/services/Hauturu_2019/MapServer",
+                minZoom: 10,
                 minNativeZoom: 15,
                 maxNativeZoom: 19,
                 maxZoom: 23,
@@ -213,18 +215,21 @@
             }),
             "Poor Knights 2023 drone imagery": L.esri.tiledMapLayer({
                 url: "https://tiles.arcgis.com/tiles/OKRmMRUG6dRnfUBh/arcgis/rest/services/Poor_Knights_Island_2023_drone_imagery/MapServer",
+                minZoom: 10,
                 minNativeZoom: 15,
                 maxZoom: 23,
                 bounds: sites["Tawhiti Rahi / Poor Knights Islands"]
             }).addTo(map),
             "Mokohinau Islands 2023 drone imagery": L.esri.tiledMapLayer({
                 url: "https://tiles.arcgis.com/tiles/OKRmMRUG6dRnfUBh/arcgis/rest/services/Mokohinau_Islands_2023_drone_imagery_EPSG_3857/MapServer",
+                minZoom: 10,
                 minNativeZoom: 15,
                 maxZoom: 23,
                 bounds: sites["Mokohinau Islands"]
             }).addTo(map),
             "Tuhua Island 2023 drone imagery": L.esri.tiledMapLayer({
                 url: "https://tiles.arcgis.com/tiles/OKRmMRUG6dRnfUBh/arcgis/rest/services/Hotsprings_Ortho/MapServer",
+                minZoom: 10,
                 minNativeZoom: 15,
                 maxZoom: 23,
                 bounds: sites["Tuhua Island / Mayor Island"]
