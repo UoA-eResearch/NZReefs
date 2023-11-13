@@ -258,7 +258,11 @@
                     console.log(csv, results.data)
                     window.data = results.data
                     for (var row of results.data) {
-                        if (!row.visible) continue;
+                        var visible = row.visible || row.visibile || row.visbile
+                        if (!visible) {
+                            console.warn("Hiding", row)
+                            continue;
+                        }
                         var filename = row.filename || row.FileName
                         if (filename) {
                             var full_filename = filename
