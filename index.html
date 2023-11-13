@@ -324,7 +324,7 @@
             complete: function (links) {
                 console.log(links.data);
                 window.links = links.data;
-                const regex = /(Hauturu2019\.csv|PKI-2019-BPS-metadata\.csv|mokes\.csv|navdata\.csv)/;
+                const regex = /(Hauturu2019\.csv|PKI 2019 BPS metadata\.csv|mokes\.csv|navdata\.csv)/;
                 var csvs = links.data.filter(l => regex.test(l.path))
                 console.log(csvs)
                 for (var csv of csvs) {
