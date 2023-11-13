@@ -261,25 +261,26 @@
                         if (!row.visible) continue;
                         var filename = row.filename || row.FileName
                         if (filename) {
+                            var full_filename = filename
                             var url = "";
                             if (csv.path == "/NZReefs/Hauturu/Hauturu2019.csv") {
-                                filename = "/NZReefs/Hauturu/imagescorrect/" + filename
+                                full_filename = "/NZReefs/Hauturu/imagescorrect/" + full_filename
                             } else if (csv.path == "/NZReefs/Mokes 2023/mokes.csv") {
-                                filename = "/NZReefs/Mokes 2023/Mokes bps images Aug 2023/" + filename
+                                full_filename = "/NZReefs/Mokes 2023/Mokes bps images Aug 2023/" + full_filename
                             } else if (csv.path.endsWith("navdata.csv")) {
                                 var path = csv.path.split("/").slice(0, -1).join("/")
-                                filename = path + "/images/" + filename
+                                full_filename = path + "/images/" + full_filename
                             }
                             var candidates = []
                             for (link of links) {
-                                if (link.path.endsWith(filename)) {
+                                if (link.path.endsWith(full_filename)) {
                                     candidates.push(link)
                                 }
                             }
                             if (candidates.length == 0) {
-                                console.warn(filename, "not found in dropbox_links.csv")
+                                console.warn(full_filename, "not found in dropbox_links.csv")
                             } else if (candidates.length > 1) {
-                                console.warn(filename, "ambiguous", candidates)
+                                console.warn(full_filename, "ambiguous", candidates)
                             }
                             var url = candidates[0]?.link
                         }
