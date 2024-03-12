@@ -335,7 +335,8 @@
             }
         })
 
-        Papa.parse("https://dl.dropbox.com/s/0bhoqxrpw5mx401/Hauturu%20Site%20metadata.csv?dl=0", {
+        var metadata_URL = 'https://corsproxy.io/?' + encodeURIComponent("https://www.dropbox.com/scl/fi/kbo13d62p60gjznj0si1o/Hauturu-Site-metadata.csv?rlkey=3dbycjtr6k80lyiuta52ukc1g&dl=0&raw=1")
+        Papa.parse(metadata_URL, {
             download: true,
             header: true,
             dynamicTyping: true,
@@ -347,7 +348,7 @@
                         .bindTooltip(d.Site.toString(), { permanent: true })
                         .bindPopup(`<b>Site: ${d.Site}</b><br>
                             Date: ${d.date_loc}<br>
-                            Depth (mean, max): ${d.AveDepth.toFixed(2)}m, ${d.MaxDepth.toFixed(2)}m<br>
+                            Depth (mean, max): ${d.Avedepth.toFixed(2)}m, ${d.Maxdepth.toFixed(2)}m<br>
                             Count: ${d.Count}<br>
                             Latlong: ${d.lat},${d.lng}<br>`)
                         .addTo(siteMarkers);
