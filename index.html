@@ -279,6 +279,8 @@
                             } else if (csv.path.endsWith("navdata.csv")) {
                                 var path = csv.path.split("/").slice(0, -1).join("/")
                                 full_filename = path + "/images/" + full_filename
+                            } else if (csv.path == "/NZReefs/Poor Knights/PKI 2019/PKI BPS 2019/PKI 2019 BPS metadata.csv") {
+                                full_filename = "/NZReefs/Poor Knights/PKI 2019/PKI BPS 2019/images/" + full_filename
                             }
                             var candidates = []
                             for (link of links) {
@@ -289,7 +291,7 @@
                             if (candidates.length == 0) {
                                 console.warn(full_filename, "not found in dropbox_links.csv")
                             } else if (candidates.length > 1) {
-                                console.warn(full_filename, "ambiguous", candidates)
+                                console.warn(csv, full_filename, "ambiguous", candidates)
                             }
                             var url = candidates[0]?.link
                         }
