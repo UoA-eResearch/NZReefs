@@ -184,6 +184,7 @@
             "Tawhiti Rahi / Poor Knights Islands": '174.68647956848145,-35.50700711950567,174.7915363311768,-35.43668714749055',
             "Mokohinau Islands": '175.08215904235843,-35.928501952502764,175.13468742370605,-35.8935350274884',
             "Tuhua Island / Mayor Island": '176.21872901916507,-37.32095999932932,176.2907409667969,-37.25226209009125',
+            "Bay of Islands": '174.17089462280273,-35.24667053780489,174.4062423706055,-35.15367027248077'
         }
 
         for (var site in sites) {
@@ -263,13 +264,14 @@
                     console.log(csv, results.data)
                     window.data = results.data
                     for (var row of results.data) {
-                        var visible = row.visible || row.visibile || row.visbile
+                        var visible = row.visible || row.visibile || row.visbile || row.Visible
                         if (!visible) {
                             console.warn("Hiding", row)
                             continue;
                         }
                         var filename = row.filename || row.FileName
                         if (filename) {
+                            var candidates = []
                             var full_filename = filename
                             var url = "";
                             if (csv.path == "/NZReefs/Hauturu/Hauturu2019.csv") {
@@ -281,11 +283,14 @@
                                 full_filename = path + "/images/" + full_filename
                             } else if (csv.path == "/NZReefs/Poor Knights/PKI 2019/PKI BPS 2019/PKI 2019 BPS metadata.csv") {
                                 full_filename = "/NZReefs/Poor Knights/PKI 2019/PKI BPS 2019/images/" + full_filename
+                            } else if (csv.path == "/NZReefs/Bay_Of_Islands/BOI_Drop_Cam_Metadata.csv") {
+                                candidates = links.filter(l => l.path.startsWith("/NZReefs/Bay_Of_Islands/") && l.path.endsWith(filename))
                             }
-                            var candidates = []
-                            for (link of links) {
-                                if (link.path.endsWith(full_filename)) {
-                                    candidates.push(link)
+                            if (!candidates.length) {
+                                for (link of links) {
+                                    if (link.path.endsWith(full_filename)) {
+                                        candidates.push(link)
+                                    }
                                 }
                             }
                             if (candidates.length == 0) {
@@ -294,9 +299,11 @@
                                 console.warn(csv, full_filename, "ambiguous", candidates)
                             }
                             var url = candidates[0]?.link
+                        } else {
+                            console.warn("No filename", row)
                         }
                         var color = "blue";
-                        if (filename.endsWith(".mp4")) {
+                        if (filename && filename.endsWith(".mp4")) {
                             color = "red";
                         }
                         var depth = row.depth || row.GPSDepth_m
@@ -326,7 +333,7 @@
             complete: function (links) {
                 console.log(links.data);
                 window.links = links.data;
-                const regex = /(Hauturu2019\.csv|PKI 2019 BPS metadata\.csv|mokes\.csv|navdata\.csv)/;
+                const regex = /(Hauturu\/Hauturu2019\.csv|PKI 2019 BPS metadata\.csv|mokes\.csv|navdata\.csv|BOI_Drop_Cam_Metadata\.csv)/;
                 var csvs = links.data.filter(l => regex.test(l.path))
                 console.log(csvs)
                 for (var csv of csvs) {

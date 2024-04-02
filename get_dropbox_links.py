@@ -6,7 +6,7 @@ from dropbox import Dropbox
 from dropbox.files import FolderMetadata
 import os
 from tqdm import tqdm
-from tqdm.contrib.concurrent import thread_map
+from tqdm.contrib.concurrent import thread_map, process_map
 import pandas as pd
 from dotenv import load_dotenv
 load_dotenv()
