@@ -254,13 +254,17 @@
 
         function parse_CSV(csv) {
             // Fix CORS
-            csv.link = 'https://corsproxy.io/?' + encodeURIComponent(csv.link)
+            csv.link = 'https://corsproxy.io/?' + csv.link
             Papa.parse(csv.link, {
                 download: true,
                 header: true,
                 dynamicTyping: true,
                 skipEmptyLines: true,
                 complete: function(results) {
+                    if (results.errors.length) {
+                        console.error(`Error parsing ${csv.link}`, results.errors)
+                        return;
+                    }
                     console.log(csv, results.data)
                     window.data = results.data
                     for (var row of results.data) {
@@ -342,7 +346,7 @@
             }
         })
 
-        var metadata_URL = 'https://corsproxy.io/?' + encodeURIComponent("https://www.dropbox.com/scl/fi/kbo13d62p60gjznj0si1o/Hauturu-Site-metadata.csv?rlkey=3dbycjtr6k80lyiuta52ukc1g&dl=0&raw=1")
+        var metadata_URL = 'https://corsproxy.io/?https://www.dropbox.com/scl/fi/kbo13d62p60gjznj0si1o/Hauturu-Site-metadata.csv?rlkey=3dbycjtr6k80lyiuta52ukc1g&dl=0&raw=1'
         Papa.parse(metadata_URL, {
             download: true,
             header: true,
